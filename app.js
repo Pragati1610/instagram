@@ -21,10 +21,13 @@ const url = `https://graph.facebook.com/${process.env.INSTAGRAM_ID}/media?fields
 let checkURL = function (item) {
     let caption = item.caption;
     caption = caption.split(" ").forEach((part) => {
-        let regex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
-        if (part.match(regex)) {
+        let regexWithoutHttp = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+        let regexWithHttp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+        
+        if (part.match(regexWithoutHttp)||part.match(regexWithHttp)) {
             item["url"] = part;
         } 
+        
     });
 }
 
