@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const router = express.Router();
 const axios = require("axios");
 const redis = require("redis");
 const cors = require("cors");
@@ -17,9 +16,6 @@ client.on("error", function (error) {
     console.error(error);
 });
 
-// router.get("/", (req, res) => {
-// });
-
 const url = `https://graph.facebook.com/${process.env.INSTAGRAM_ID}/media?fields=id,media_type,media_url,timestamp,caption&access_token=${process.env.ACCESS_TOKEN}`;
 
 let checkURL = function (item) {
@@ -28,7 +24,6 @@ let checkURL = function (item) {
         let regex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
         if (part.match(regex)) {
             item["url"] = part;
-            return item;
         } else {
             console.log("no match");
         }
@@ -41,10 +36,9 @@ app.get("/", async (req, res) => {
             res.send(reply);
         } else {
             try{
-                let result = await axios.get(url);
-            // delete result.data.paging;
+            let result = await axios.get(url);
             let data = result.data.data;
-            data = data.map(checkURL);
+            data.forEach(checkURL);
 
             client.set("completeData", JSON.stringify({
                     data: data
@@ -63,7 +57,6 @@ app.get("/", async (req, res) => {
             }
         }
     })
-
 });
 
 app.listen(port, (req, res) => {
