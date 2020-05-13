@@ -24,9 +24,7 @@ let checkURL = function (item) {
         let regex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
         if (part.match(regex)) {
             item["url"] = part;
-        } else {
-            console.log("no match");
-        }
+        } 
     });
 }
 
