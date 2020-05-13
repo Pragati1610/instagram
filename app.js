@@ -21,6 +21,20 @@ client.on("error", function (error) {
 // });
 
 const url = `https://graph.facebook.com/${process.env.INSTAGRAM_ID}/media?fields=id,media_type,media_url,timestamp,caption&access_token=${process.env.ACCESS_TOKEN}`;
+
+let checkURL = function (item) {
+    let caption = item.caption;
+    caption = caption.split(" ").forEach((part) => {
+        let regex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+        if (part.match(regex)) {
+            item["url"] = part;
+            return item;
+        } else {
+            console.log("no match");
+        }
+    });
+}
+
 app.get("/", async (req, res) => {
     client.get("completeData", async (err, reply) => {
         if (reply) {
@@ -30,6 +44,7 @@ app.get("/", async (req, res) => {
                 let result = await axios.get(url);
             // delete result.data.paging;
             let data = result.data.data;
+            data = data.map(checkURL);
 
             client.set("completeData", JSON.stringify({
                     data: data
@@ -46,7 +61,6 @@ app.get("/", async (req, res) => {
                     error: err
                 })
             }
-
         }
     })
 

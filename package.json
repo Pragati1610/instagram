@@ -16,8 +16,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http": "0.0.1-security",
-    "instagram-node": "^0.5.8",
-    "node-instagram": "^4.3.0",
     "redis": "^3.0.2"
   }
 }
