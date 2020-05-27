@@ -20,7 +20,7 @@ const url = `https://graph.facebook.com/${process.env.INSTAGRAM_ID}/media?fields
 
 let checkURL = function (item) {
     let caption = item.caption;
-    caption = caption.split(" ").forEach((part) => {
+    caption.split(" ").forEach((part) => {
         let regexWithoutHttp = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
         let regexWithHttp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
         
@@ -34,7 +34,7 @@ let checkURL = function (item) {
 app.get("/", async (req, res) => {
     client.get("completeData", async (err, reply) => {
         if (reply) {
-            res.send(reply);
+            res.json(reply);
         } else {
             try{
             let result = await axios.get(url);
