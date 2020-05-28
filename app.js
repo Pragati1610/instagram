@@ -35,7 +35,7 @@ let checkURL = function (item) {
 app.get("/", async (req, res) => {
     client.get("completeData", async (err, reply) => {
         if (reply) {
-            res.send(reply);
+            res.json(reply);
         } else {
             try{
             let result = await axios.get(url);
