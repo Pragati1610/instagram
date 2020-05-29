@@ -35,6 +35,7 @@ let checkURL = function (item) {
 app.get("/", async (req, res) => {
     client.get("completeData", async (err, reply) => {
         if (reply) {
+            reply = JSON.parse(reply)
             res.json(reply);
         } else {
             try{
