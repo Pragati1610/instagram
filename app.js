@@ -5,6 +5,7 @@ const redis = require("redis");
 const cors = require("cors");
 const port = process.env.PORT || 3000;
 const dotenv = require("dotenv");
+const getURL = require("get-urls");
 
 dotenv.config();
 
@@ -24,12 +25,17 @@ let checkURL = function (item) {
     caption.split(" ").forEach((part) => {
         let regexWithoutHttp = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
         let regexWithHttp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
-        
-        if (part.match(regexWithoutHttp)||part.match(regexWithHttp)) {
+
+        if (part.match(regexWithoutHttp) || part.match(regexWithHttp)) {
             item["url"] = part;
-        } 
-        
+        }
+
     });
+}
+
+let checkURL1 = function (item) {
+    let caption = item.caption;
+    item["url"] = getURL(caption);
 }
 
 app.get("/", async (req, res) => {
@@ -38,21 +44,21 @@ app.get("/", async (req, res) => {
             reply = JSON.parse(reply)
             res.json(reply);
         } else {
-            try{
-            let result = await axios.get(url);
-            let data = result.data.data;
-            data.forEach(checkURL);
+            try {
+                let result = await axios.get(url);
+                let data = result.data.data;
+                data.forEach(checkURL1);
 
-            client.set("completeData", JSON.stringify({
+                client.set("completeData", JSON.stringify({
+                        data: data
+                    }),
+                    "EX",
+                    7 * 60 * 60
+                );
+                return res.status(200).json({
                     data: data
-                }),
-                "EX",
-                7 * 60 * 60
-            );
-            return res.status(200).json({
-                data: data
-            });
-            }catch(err){
+                });
+            } catch (err) {
                 console.log(err);
                 res.status(500).json({
                     error: err
