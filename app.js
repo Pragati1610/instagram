@@ -17,7 +17,7 @@ client.on("error", function (error) {
 
 const url = `https://graph.facebook.com/${process.env.INSTAGRAM_ID}/media?fields=id,media_type,media_url,timestamp,caption&access_token=${process.env.ACCESS_TOKEN}`;
 
-let checkURL = function (item) {
+let getURL = function (item) {
     let caption = item.caption;
     caption.split(" ").forEach((part) => {
         let regexWithoutHttp = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
