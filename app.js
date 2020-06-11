@@ -5,6 +5,7 @@ const redis = require("redis");
 const cors = require("cors");
 const port = process.env.PORT || 3000;
 const dotenv = require("dotenv");
+const getURL = require("get-urls");
 
 dotenv.config();
 
