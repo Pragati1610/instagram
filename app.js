@@ -9,8 +9,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const client = redis.createClient(process.env.REDIS_URL);
-
-client.auth(process.env.PASSWORD)
 app.use(cors());
 
 client.on("error", function (error) {
